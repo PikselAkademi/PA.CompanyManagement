@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.Json;
 using Microsoft.Extensions.Configuration;
 using PA.CompanyManagement.AccountingService.Domain.Entities.Metas;
 using PA.CompanyManagement.AccountingService.Domain.Entities.Types;
 using PA.CompanyManagement.Core.Domain.Settings;
+using PA.CompanyManagement.Core.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -42,5 +44,36 @@ namespace PA.CompanyManagement.AccountingService.Infrastructure.Contexts
         public DbSet<ExpenseType> ExpenseTypes { get; set; }
         public DbSet<Income> Incomes { get; set; }
         public DbSet<Expense> Expenses { get; set; }
+
+        public override int SaveChanges()
+        {
+            if (_currentUser != null)
+                this.OnBeforeSaving(_currentUser);
+
+            return base.SaveChanges();
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            if (_currentUser != null)
+                this.OnBeforeSaving(_currentUser);
+
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (_conf != null)
+                optionsBuilder.Configure(_conf);
+
+#if DEBUG
+            if (!optionsBuilder.IsConfigured)
+                optionsBuilder.UseSqlServer("Server=127.0.0.1;User Id=TheRoslyn;Password=1q2w3e4r5.T!;Encrypt=False;Database=AccountingDb;");
+#endif
+
+            base.OnConfiguring(optionsBuilder);
+        }
+
     }
+
 }
