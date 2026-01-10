@@ -10,6 +10,8 @@ using static PA.CompanyManagement.Core.Utils.ValidationHelper;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using PA.CompanyManagement.AccountingService.Domain.Entities.Types;
+using PA.CompanyManagement.AccountingService.Application.DTOs.Responses.Types;
 
 namespace PA.CompanyManagement.AccountingService.Infrastructure.Repositories.Metas
 {
@@ -35,6 +37,7 @@ namespace PA.CompanyManagement.AccountingService.Infrastructure.Repositories.Met
                         Description = request.Description,
                         Title = request.Title,
                         CreatedBy = request.CreatedBy,
+
                     });
                 }
                 catch (Exception ex)
@@ -108,34 +111,212 @@ namespace PA.CompanyManagement.AccountingService.Infrastructure.Repositories.Met
             }
         }
 
-        public Task<List<MinimalExpenseResponse>> GetAllAsync()
+        public async Task<List<MinimalExpenseResponse>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await _context
+                    .Expenses
+                    .Select(x => new MinimalExpenseResponse
+                    {
+                        Amount = x.Amount,
+                        Completed = x.Completed,
+                        ExpenseDate = x.ExpenseDate,
+                        Id = x.Id,
+                        Title = x.Title,
+                        //TypeName = _context.ExpenseTypes.Find(x.TypeId).Name ?? string.Empty
+                        TypeName = GetTypeName(x.TypeId)
+                    })
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new PAContextQueryException("AccountingService:ExpenseRepository:GetAllAsync", ex);
+            }
         }
 
-        public Task<List<MinimalExpenseResponse>> GetAllAsync(Guid expenseTypeId)
+        private string GetTypeName(Guid? id)
         {
-            throw new NotImplementedException();
+            if (id == Guid.Empty)
+                return string.Empty;
+            var item = _context.ExpenseTypes.Find(id);
+            if (item != null)
+                return item.Name ?? string.Empty;
+            return string.Empty;
         }
 
-        public Task<ExpenseResponse> GetAsync(Guid id)
+        public async Task<List<MinimalExpenseResponse>> GetAllAsync(Guid expenseTypeId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await _context
+                    .Expenses
+                    .Where(x => x.TypeId == expenseTypeId)
+                    .Select(x => new MinimalExpenseResponse
+                    {
+                        Amount = x.Amount,
+                        Completed = x.Completed,
+                        ExpenseDate = x.ExpenseDate,
+                        Id = x.Id,
+                        Title = x.Title,
+                        TypeName = _context.ExpenseTypes.Find(x.TypeId).Name ?? string.Empty
+                    })
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new PAContextQueryException("AccountingService:ExpenseRepository:GetAllAsync", ex);
+            }
         }
 
-        public Task<DetailedExpenseResponse> GetDetailedAsync(Guid id)
+        public async Task<ExpenseResponse?> GetAsync(Guid id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await _context
+                    .Expenses
+                    .Where(x => x.Id == id)
+                    .Select(x => new ExpenseResponse
+                    {
+                        Id = x.Id,
+                        Amount = x.Amount,
+                        Completed = x.Completed,
+                        Description = x.Description,
+                        ExpenseDate = x.ExpenseDate,
+                        Title = x.Title,
+                        TaxRate = _context.ExpenseTypes.Find(x.TypeId).TaxRate,
+                        TypeName = _context.ExpenseTypes.Find(x.TypeId).Name
+                    })
+                    .FirstOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new PAContextQueryException("AccountingService:ExpenseRepository:GetAsync", ex);
+            }
         }
 
-        public Task PatchAsync(ExpensePatchRequest request)
+        public async Task<DetailedExpenseResponse?> GetDetailedAsync(Guid id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await _context
+                    .Expenses
+                    .Where(x => x.Id == id)
+                    .Select(x => new DetailedExpenseResponse
+                    {
+                        Id = x.Id,
+                        Amount = x.Amount,
+                        Completed = x.Completed,
+                        Description = x.Description,
+                        ExpenseDate = x.ExpenseDate,
+                        Title = x.Title,
+                        CreatedAt = x.CreatedAt,
+                        CreatedBy = x.CreatedBy,
+                        DeletedAt = x.DeletedAt,
+                        DeletedBy = x.DeletedBy,
+                        IsDeleted = x.IsDeleted,
+                        LastModifiedAt = x.LastModifiedAt,
+                        LastModifiedBy = x.LastModifiedBy,
+                        TypeId = x.TypeId,
+                        ExpenseType = _context
+                            .ExpenseTypes
+                            .Where(y => y.Id == x.TypeId)
+                            .Select(y => new ExpenseTypeResponse
+                            {
+                                Id = y.Id,
+                                Name = y.Name ?? string.Empty,
+                                TaxRate = y.TaxRate ?? 20
+                            })
+                            .FirstOrDefault()
+                    })
+                    .FirstOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new PAContextQueryException("AccountingService:ExpenseRepository:GetAsync", ex);
+            }
         }
 
-        public Task UpdateAsync(ExpenseUpdateRequest request)
+        public async Task PatchAsync(ExpensePatchRequest request)
         {
-            throw new NotImplementedException();
+            try
+            {
+                Expense? item = await _context.Expenses.FindAsync(request.Id);
+
+                if (item is null)
+                    throw new PAContextPatchException("AccountingService:ExpenseRepository:PatchAsync:NotFound");
+
+                item.LastModifiedBy = request.ModifiedBy;
+                item.Completed = request.Completed;
+
+                try
+                {
+                    _context.Expenses.Update(item);
+                }
+                catch (Exception ex)
+                {
+                    throw new PAContextPatchException("AccountingService:ExpenseRepository:PasthAsync:Update", ex);
+                }
+
+                int response = await _context.SaveChangesAsync();
+                if (response <= 0)
+                    throw new PAContextSaveException("AccountingService:ExpenseRepository:SaveChangesAsync");
+
+
+
+            }
+            catch (DbUpdateException dbEx) when (IsUniqueViolation(dbEx))
+            {
+                throw new PAContextSaveException("AccountingService:ExpenseRepository:PatchAsync:SaveChangesAsync", dbEx);
+            }
+            catch (Exception ex) when (
+                ex.GetType() != typeof(PAContextPatchException) &&
+                ex.GetType() != typeof(PAContextSaveException))
+            {
+                throw new PAContextUncatchedException("AccountingService:ExpenseRepository:PatchAsync", ex);
+            }
+        }
+
+        public async Task UpdateAsync(ExpenseUpdateRequest request)
+        {
+            try
+            {
+                Expense? item = await _context.Expenses.FindAsync(request.Id);
+
+                if (item is null)
+                    throw new PAContextUpdateException("AccountingService:ExpenseRepository:UpdateAsync:NotFound");
+
+                item.LastModifiedBy = request.ModifiedBy;
+                item.Amount = request.Amount;
+                item.Description = request.Description;
+                item.ExpenseDate = request.ExpenseDate;
+
+                try
+                {
+                    _context.Expenses.Update(item);
+                }
+                catch (Exception ex)
+                {
+                    throw new PAContextUpdateException("AccountingService:ExpenseRepository:UpdateAsync:Update", ex);
+                }
+
+                int response = await _context.SaveChangesAsync();
+                if (response <= 0)
+                    throw new PAContextSaveException("AccountingService:ExpenseRepository:UpdateAsync:SaveChangesAsync");
+
+
+
+            }
+            catch (DbUpdateException dbEx) when (IsUniqueViolation(dbEx))
+            {
+                throw new PAContextSaveException("AccountingService:ExpenseRepository:PatchAsync:SaveChangesAsync", dbEx);
+            }
+            catch (Exception ex) when (
+                ex.GetType() != typeof(PAContextPatchException) &&
+                ex.GetType() != typeof(PAContextSaveException))
+            {
+                throw new PAContextUncatchedException("AccountingService:ExpenseRepository:PatchAsync", ex);
+            }
         }
     }
 }

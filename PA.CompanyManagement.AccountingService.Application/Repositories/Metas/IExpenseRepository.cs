@@ -11,8 +11,8 @@ namespace PA.CompanyManagement.AccountingService.Application.Repositories.Metas
         Task<List<MinimalExpenseResponse>> GetAllAsync(); 
         Task<List<MinimalExpenseResponse>> GetAllAsync(Guid expenseTypeId);
 
-        Task<ExpenseResponse> GetAsync(Guid id);
-        Task<DetailedExpenseResponse> GetDetailedAsync(Guid id);
+        Task<ExpenseResponse?> GetAsync(Guid id);
+        Task<DetailedExpenseResponse?> GetDetailedAsync(Guid id);
 
         Task<ExpenseResponse> CreateAsync(ExpenseCreateRequest request);
 
