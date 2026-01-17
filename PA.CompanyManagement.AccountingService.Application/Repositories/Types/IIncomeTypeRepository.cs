@@ -10,8 +10,8 @@ namespace PA.CompanyManagement.AccountingService.Application.Repositories.Types
     {
         Task<List<IncomeTypeResponse>> GetAllAsync();
 
-        Task<IncomeTypeResponse> GetAsync(Guid id);
-        Task<DetailedIncomeTypeResponse> GetDetailedAsync(Guid id);
+        Task<IncomeTypeResponse?> GetAsync(Guid id);
+        Task<DetailedIncomeTypeResponse?> GetDetailedAsync(Guid id);
 
         Task<IncomeTypeResponse> CreateAsync(IncomeTypeCreateRequest request);
 

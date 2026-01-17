@@ -11,23 +11,23 @@ using System.Text;
 
 namespace PA.CompanyManagement.AccountingService.Infrastructure.Repositories.Types
 {
-    public class ExpenseTypeRepository : IExpenseTypeRepository
+    public class IncomeTypeRepository : IIncomeTypeRepository
     {
 
         private readonly AccountingDBContext _context;
 
-        public ExpenseTypeRepository(AccountingDBContext context)
+        public IncomeTypeRepository(AccountingDBContext context)
         {
             _context = context;
         }
 
-        public async Task<ExpenseTypeResponse> CreateAsync(ExpenseTypeCreateRequest request)
+        public async Task<IncomeTypeResponse> CreateAsync(IncomeTypeCreateRequest request)
         {
             try
             {
                 await _context
-                    .ExpenseTypes
-                    .AddAsync(new ExpenseType
+                    .IncomeTypes
+                    .AddAsync(new IncomeType
                     {
                         CreatedBy = request.CreatedBy,
                         Name = request.Name,
@@ -37,11 +37,11 @@ namespace PA.CompanyManagement.AccountingService.Infrastructure.Repositories.Typ
                 await _context.SaveChangesAsync();
 
                 return await _context
-                    .ExpenseTypes
+                    .IncomeTypes
                     .AsNoTracking()
                     .Where(x => x.Name == request.Name && x.TaxRate == request.TaxRate)
                     .OrderBy(x => x.CreatedAt)
-                    .Select(x => new ExpenseTypeResponse
+                    .Select(x => new IncomeTypeResponse
                     {
                         Id = x.Id,
                         Name = x.Name,
@@ -51,7 +51,7 @@ namespace PA.CompanyManagement.AccountingService.Infrastructure.Repositories.Typ
             }
             catch (Exception ex)
             {
-                throw new PAContextAddException("ExpenseType:Create", ex);
+                throw new PAContextAddException("IncomeType:Create", ex);
             }
         }
 
@@ -59,23 +59,23 @@ namespace PA.CompanyManagement.AccountingService.Infrastructure.Repositories.Typ
         {
             try
             {
-                _context.ExpenseTypes.Remove(_context.ExpenseTypes.Find(id));
+                _context.IncomeTypes.Remove(_context.IncomeTypes.Find(id));
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex)
             {
-                throw new PAContextRemoveException("ExpenseType:Delete", ex);
+                throw new PAContextRemoveException("IncomeType:Delete", ex);
             }
         }
 
-        public async Task<List<ExpenseTypeResponse>> GetAllAsync()
+        public async Task<List<IncomeTypeResponse>> GetAllAsync()
         {
             try
             {
                 return await _context
-                    .ExpenseTypes
+                    .IncomeTypes
                     .AsNoTracking()
-                    .Select(x => new ExpenseTypeResponse
+                    .Select(x => new IncomeTypeResponse
                     {
                         Id = x.Id,
                         Name = x.Name,
@@ -85,19 +85,19 @@ namespace PA.CompanyManagement.AccountingService.Infrastructure.Repositories.Typ
             }
             catch (Exception ex)
             {
-                throw new PAContextQueryException("ExpenseTypes:GetAll", ex);
+                throw new PAContextQueryException("IncomeTypes:GetAll", ex);
             }
         }
 
-        public async Task<ExpenseTypeResponse?> GetAsync(Guid id)
+        public async Task<IncomeTypeResponse?> GetAsync(Guid id)
         {
             try
             {
                 return await _context
-                    .ExpenseTypes
+                    .IncomeTypes
                     .AsNoTracking()
                     .Where(x => x.Id == id)
-                    .Select(x => new ExpenseTypeResponse
+                    .Select(x => new IncomeTypeResponse
                     {
                         Id = x.Id,
                         Name = x.Name,
@@ -107,19 +107,19 @@ namespace PA.CompanyManagement.AccountingService.Infrastructure.Repositories.Typ
             }
             catch (Exception ex)
             {
-                throw new PAContextQueryException("ExpenseType:Get", ex);
+                throw new PAContextQueryException("IncomeType:Get", ex);
             }
         }
 
-        public async Task<DetailedExpeseTypeResponse?> GetDetailedAsync(Guid id)
+        public async Task<DetailedIncomeTypeResponse?> GetDetailedAsync(Guid id)
         {
             try
             {
                 return await _context
-                    .ExpenseTypes
+                    .IncomeTypes
                     .AsNoTracking()
                     .Where(x => x.Id == id)
-                    .Select(x => new DetailedExpeseTypeResponse
+                    .Select(x => new DetailedIncomeTypeResponse
                     {
                         Id = x.Id,
                         Name = x.Name,
@@ -136,33 +136,34 @@ namespace PA.CompanyManagement.AccountingService.Infrastructure.Repositories.Typ
             }
             catch (Exception ex)
             {
-                throw new PAContextQueryException("ExpenseType:GetDetailed", ex);
+                throw new PAContextQueryException("IncomeType:GetDetailed", ex);
             }
         }
 
-        public async Task UpdateAsync(ExpenseTypeUpdateRequest request)
+        public async Task UpdateAsync(IncomeTypeUpdateRequest request)
         {
             try
             {
                 var data = await _context
-                    .ExpenseTypes
+                    .IncomeTypes
                     .FindAsync(request.Id);
 
                 if (data is null)
-                    throw new PAContextUpdateException("ExpenseType:Update:NotFound");
+                    throw new PAContextUpdateException("IncomeType:Update:NotFound");
 
                 data.Name = request.Name;
                 data.TaxRate = request.TaxRate;
                 data.LastModifiedBy = request.ModifiedBy;
 
-                _context.ExpenseTypes.Update(data);
+                _context.IncomeTypes.Update(data);
                 await _context.SaveChangesAsync();
 
             }
             catch (Exception ex)
             {
-                throw new PAContextUpdateException("ExpenseType:Update", ex);
+                throw new PAContextUpdateException("IncomeType:Update", ex);
             }
         }
+
     }
 }

@@ -10,4 +10,12 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\Metas\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PA.CompanyManagement.AccountingService.Infrastructure\PA.CompanyManagement.AccountingService.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -15,7 +15,7 @@ using PA.CompanyManagement.AccountingService.Application.DTOs.Responses.Types;
 
 namespace PA.CompanyManagement.AccountingService.Infrastructure.Repositories.Metas
 {
-    public class ExpenseRepository : IExpenseRepository
+    public class ExpenseRepository : IExpensRepository
     {
         private readonly AccountingDBContext _context;
 
