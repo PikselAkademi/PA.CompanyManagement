@@ -32,10 +32,16 @@ namespace PA.CompanyManagement.Core.Extensions
                     case EntityState.Added:
                         entity.IsDeleted = false;
                         entity.CreatedAt = DateTimeOffset.UtcNow;
-                        entity.CreatedBy = currentUser.Id;
+
+                        if (entity.CreatedBy is null || entity.CreatedBy == Guid.Empty)
+                            entity.CreatedBy = currentUser.Id;
+
                         entity.LastModifiedAt = DateTimeOffset.UtcNow;
                         entity.LastModifiedBy = currentUser.Id;
-                        entity.Id = Guid.NewGuid();
+
+                        if (entity.Id == null || entity.Id == Guid.Empty)
+                            entity.Id = Guid.NewGuid();
+
                         break;
                 }
             }
