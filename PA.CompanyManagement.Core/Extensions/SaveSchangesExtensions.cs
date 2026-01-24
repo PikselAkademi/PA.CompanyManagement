@@ -46,5 +46,37 @@ namespace PA.CompanyManagement.Core.Extensions
                 }
             }
         }
+
+        public static void OnBeforeSaving(this DbContext context)
+        {
+            var modifiedEntires = context.ChangeTracker.Entries()
+                .Where(x => x.Entity is BaseEntity && x.State is EntityState.Added or EntityState.Modified);
+
+            foreach (var entire in modifiedEntires)
+            {
+                var entity = entire.Entity as BaseEntity;
+
+                switch (entire.State)
+                {
+                    case EntityState.Modified:
+                        entity.LastModifiedAt = DateTimeOffset.UtcNow;
+                        if (entity.IsDeleted == true)
+                        {
+                            entity.DeletedAt = DateTimeOffset.UtcNow;
+                        }
+                        break;
+                    case EntityState.Added:
+                        entity.IsDeleted = false;
+                        entity.CreatedAt = DateTimeOffset.UtcNow;
+
+                        entity.LastModifiedAt = DateTimeOffset.UtcNow;
+
+                        if (entity.Id == null || entity.Id == Guid.Empty)
+                            entity.Id = Guid.NewGuid();
+
+                        break;
+                }
+            }
+        }
     }
 }

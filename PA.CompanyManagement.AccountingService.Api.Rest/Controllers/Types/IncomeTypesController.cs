@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace PA.CompanyManagement.AccountingService.Api.Rest.Controllers.Types
 {
-    [Route("api/expense-type")]
+    [Route("api/income-type")]
     [ApiController]
-    public class ExpenseTypesController : ControllerBase
+    public class IncomeTypesController : ControllerBase
     {
-        private readonly IExpenseTypeRepository _repository;
+        private readonly IIncomeTypeRepository _repository;
 
-        public ExpenseTypesController(IExpenseTypeRepository repository)
+        public IncomeTypesController(IIncomeTypeRepository repository)
         {
             _repository = repository;
         }
@@ -28,7 +28,7 @@ namespace PA.CompanyManagement.AccountingService.Api.Rest.Controllers.Types
         /// Veritabaınında bulunan bütün gider türlerini döner eğer veritabanında bir gider türü yoksa 204 ile boş bir cevap döner.
         /// </remarks>
         [HttpGet]
-        [ProducesResponseType<List<ExpenseTypeResponse>>(StatusCodes.Status200OK)]
+        [ProducesResponseType<List<IncomeTypeResponse>>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError)]
         [Produces("application/json")]
@@ -141,7 +141,7 @@ namespace PA.CompanyManagement.AccountingService.Api.Rest.Controllers.Types
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(ExpenseTypeCreateRequest? request)
+        public async Task<IActionResult> Post(IncomeTypeCreateRequest? request)
         {
             try
             {
@@ -181,7 +181,7 @@ namespace PA.CompanyManagement.AccountingService.Api.Rest.Controllers.Types
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(Guid id, ExpenseTypeUpdateRequest? request)
+        public async Task<IActionResult> Put(Guid id, IncomeTypeUpdateRequest? request)
         {
             try
             {

@@ -49,6 +49,8 @@ namespace PA.CompanyManagement.AccountingService.Infrastructure.Contexts
         {
             if (_currentUser != null)
                 this.OnBeforeSaving(_currentUser);
+            else
+                this.OnBeforeSaving();
 
             return base.SaveChanges();
         }
@@ -57,8 +59,10 @@ namespace PA.CompanyManagement.AccountingService.Infrastructure.Contexts
         {
             if (_currentUser != null)
                 this.OnBeforeSaving(_currentUser);
+            else
+                this.OnBeforeSaving();
 
-            return base.SaveChangesAsync(cancellationToken);
+                return base.SaveChangesAsync(cancellationToken);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
