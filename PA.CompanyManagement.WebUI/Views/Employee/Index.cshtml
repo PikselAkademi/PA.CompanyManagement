@@ -1,0 +1,44 @@
+﻿@using PA.CompanyManagement.EmployeeService.Application.DTOs.Responses
+@model ICollection<EmployeeResponse>
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Çalışanlar</h5>
+        <a class="btn btn-primary float-end" asp-action="Create">Yeni</a>
+    </div>
+    <div class="card-body">
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Çalışan</th>
+                    <th scope="col">Telefon Numarası</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @item.FirstName @item.LastName
+                        </td>
+                        <td>
+                            @item.PhoneNumber
+                        </td>
+                        <td>
+                            <a class="btn btn-primary" 
+                                asp-action="Detail" asp-route-id="@item.Id">Detay</a>
+
+                            <a class="btn btn-warning"
+                                asp-action="Update" asp-route-id="@item.Id">Düzenle</a>
+
+                            <button class="btn btn-danger">Sil</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
