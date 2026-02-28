@@ -111,7 +111,7 @@ namespace PA.CompanyManagement.AccountingService.Infrastructure.Repositories.Typ
             }
         }
 
-        public async Task<DetailedExpeseTypeResponse?> GetDetailedAsync(Guid id)
+        public async Task<DetailedExpenseTypeResponse?> GetDetailedAsync(Guid id)
         {
             try
             {
@@ -119,7 +119,7 @@ namespace PA.CompanyManagement.AccountingService.Infrastructure.Repositories.Typ
                     .ExpenseTypes
                     .AsNoTracking()
                     .Where(x => x.Id == id)
-                    .Select(x => new DetailedExpeseTypeResponse
+                    .Select(x => new DetailedExpenseTypeResponse
                     {
                         Id = x.Id,
                         Name = x.Name,

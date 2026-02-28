@@ -1,0 +1,42 @@
+﻿@using PA.CompanyManagement.EmployeeService.Application.DTOs.Responses
+@model EmployeeResponse
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Çalışan Bilgileri</h5>
+        <a class="btn btn-primary float-end" asp-action="Index">Geri</a>
+    </div>
+    <div class="card-body">
+
+        <div class="mb-6">
+            <label class="form-label" asp-for="FirstName"></label>
+            <input type="text" class="form-control" asp-for="FirstName" readonly disabled>
+        </div>
+
+        <div class="mb-6">
+            <label class="form-label" asp-for="LastName"></label>
+            <input type="text" class="form-control" asp-for="LastName" readonly disabled>
+        </div>
+
+        <div class="mb-6">
+            <label class="form-label" asp-for="PhoneNumber"></label>
+            <input type="tel" class="form-control" asp-for="PhoneNumber" readonly disabled>
+        </div>
+
+        <div class="mb-6">
+            <label class="form-label" asp-for="EmailAddress"></label>
+            <input type="email" class="form-control" asp-for="EmailAddress" readonly disabled>
+        </div>
+
+        <div class="mb-6">
+            <label class="form-label" asp-for="BirthDate"></label>
+            <input type="date" class="form-control" asp-for="BirthDate" readonly disabled>
+        </div>
+
+        <div class="mb-6">
+            <label class="form-label" asp-for="Address"></label>
+            <textarea class="form-control" asp-for="Address" readonly disabled></textarea>
+        </div>
+
+    </div>
+</div>

@@ -8,7 +8,7 @@
       data-assets-path="~/assets/"
       data-template="vertical-menu-template-free">
 <head>
-  <partial name="_Head" />
+    <partial name="_Head" />
 </head>
 
 <body>
@@ -52,6 +52,7 @@
     <!-- / Layout wrapper -->
 
 
-   <partial name="_Scripts" />
+    <partial name="_Scripts" />
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

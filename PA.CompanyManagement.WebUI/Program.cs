@@ -1,3 +1,4 @@
+using PA.CompanyManagement.WebUI.Clients.Accounting;
 using PA.CompanyManagement.WebUI.Clients.Employee;
 using System.Net.Http.Headers;
 
@@ -14,7 +15,35 @@ namespace PA.CompanyManagement.WebUI
 
             builder.Services.AddHttpClient<IEmployeeApiClient, EmployeeApiClient>(s =>
             {
-                s.BaseAddress = new Uri("https://localhost:7255/api/emp");
+                s.BaseAddress = new Uri("https://localhost:7255/api/emp/");
+
+                s.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            });
+
+            builder.Services.AddHttpClient<IIncomeTypeApiClient, IncomeTypeApiClient>(s =>
+            {
+                s.BaseAddress = new Uri("https://localhost:7255/api/ty/ic/");
+
+                s.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            });
+
+            builder.Services.AddHttpClient<IExpenseTypeApiClient, ExpenseTypeApiClient>(s =>
+            {
+                s.BaseAddress = new Uri("https://localhost:7255/api/ty/ex/");
+
+                s.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            });
+
+            builder.Services.AddHttpClient<IIncomeApiClient, IncomeApiClient>(s =>
+            {
+                s.BaseAddress = new Uri("https://localhost:7255/api/mt/ic/");
+
+                s.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            });
+
+            builder.Services.AddHttpClient<IExpenseApiClient, ExpenseApiClient>(s =>
+            {
+                s.BaseAddress = new Uri("https://localhost:7255/api/mt/ex/");
 
                 s.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             });

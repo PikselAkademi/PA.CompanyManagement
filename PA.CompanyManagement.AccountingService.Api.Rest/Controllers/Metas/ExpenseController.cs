@@ -10,9 +10,9 @@ namespace PA.CompanyManagement.AccountingService.Api.Rest.Controllers.Metas
     [ApiController]
     public class ExpenseController : ControllerBase
     {
-        private readonly IExpensRepository _repository;
+        private readonly IExpenseRepository _repository;
 
-        public ExpenseController(IExpensRepository repository)
+        public ExpenseController(IExpenseRepository repository)
         {
             _repository = repository;
         }

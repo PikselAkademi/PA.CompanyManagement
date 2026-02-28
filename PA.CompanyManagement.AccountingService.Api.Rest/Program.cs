@@ -23,7 +23,7 @@ namespace PA.CompanyManagement.AccountingService.Api.Rest
             builder.Services.AddScoped<IExpenseTypeRepository, ExpenseTypeRepository>();
             builder.Services.AddScoped<IIncomeTypeRepository, IncomeTypeRepository>();
 
-            builder.Services.AddScoped<IExpensRepository, ExpenseRepository>();
+            builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
             builder.Services.AddScoped<IIncomeRepository, IncomeRepository>();
 
             var app = builder.Build();

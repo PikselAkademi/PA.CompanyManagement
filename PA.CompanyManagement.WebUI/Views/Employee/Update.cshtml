@@ -1,0 +1,43 @@
+﻿@using PA.CompanyManagement.EmployeeService.Application.DTOs.Requests
+@model EmployeeUpdateRequest
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Çalışan Düzenle</h5>
+        <a class="btn btn-primary float-end" asp-action="Index">Geri</a>
+    </div>
+    <div class="card-body">
+
+        <form asp-action="Update" enctype="multipart/form-data" method="post">
+
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly" style="color: red;"></div>
+
+            @Html.Hidden(nameof(Model.UpdatedBy), Guid.Empty)
+
+            @Html.HiddenFor(x=>x.Id)
+
+            <div class="mb-6">
+                <label class="form-label" asp-for="PhoneNumber"></label>
+                <input type="tel" class="form-control" asp-for="PhoneNumber">
+                <span asp-validation-for="PhoneNumber" style="color: red;"></span>
+            </div>
+
+            <div class="mb-6">
+                <label class="form-label" asp-for="EmailAddress"></label>
+                <input type="email" class="form-control" asp-for="EmailAddress">
+                <span asp-validation-for="EmailAddress" style="color: red;"></span>
+            </div>
+
+            <div class="mb-6">
+                <label class="form-label" asp-for="Address"></label>
+                <textarea class="form-control" asp-for="Address"></textarea>
+                <span asp-validation-for="Address" style="color: red;"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Kaydet</button>
+        </form>
+
+    </div>
+</div>

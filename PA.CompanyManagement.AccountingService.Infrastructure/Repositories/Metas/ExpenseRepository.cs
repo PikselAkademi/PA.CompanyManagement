@@ -16,7 +16,7 @@ using Microsoft.IdentityModel.Abstractions;
 
 namespace PA.CompanyManagement.AccountingService.Infrastructure.Repositories.Metas
 {
-    public class ExpenseRepository : IExpensRepository
+    public class ExpenseRepository : IExpenseRepository
     {
         private readonly AccountingDBContext _context;
 

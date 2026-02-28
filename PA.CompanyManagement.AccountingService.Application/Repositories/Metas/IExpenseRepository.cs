@@ -6,7 +6,7 @@ using System.Text;
 
 namespace PA.CompanyManagement.AccountingService.Application.Repositories.Metas
 {
-    public interface IExpensRepository
+    public interface IExpenseRepository
     {
         Task<List<MinimalExpenseResponse>> GetAllAsync(); 
         Task<List<MinimalExpenseResponse>> GetAllAsync(Guid expenseTypeId);

@@ -12,7 +12,7 @@ namespace PA.CompanyManagement.AccountingService.Application.DTOs.Responses.Type
         public decimal? TaxRate { get; set; }
     }
 
-    public class DetailedExpeseTypeResponse : ExpenseType
+    public class DetailedExpenseTypeResponse : ExpenseType
     {
     }
 

@@ -12,7 +12,7 @@ namespace PA.CompanyManagement.AccountingService.Application.Repositories.Types
         Task<List<ExpenseTypeResponse>> GetAllAsync();
 
         Task<ExpenseTypeResponse?> GetAsync(Guid id);
-        Task<DetailedExpeseTypeResponse?> GetDetailedAsync(Guid id);
+        Task<DetailedExpenseTypeResponse?> GetDetailedAsync(Guid id);
 
         Task<ExpenseTypeResponse> CreateAsync(ExpenseTypeCreateRequest request);
 

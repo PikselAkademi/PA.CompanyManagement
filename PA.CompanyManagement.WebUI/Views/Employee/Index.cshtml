@@ -27,13 +27,13 @@
                             @item.PhoneNumber
                         </td>
                         <td>
-                            <a class="btn btn-primary" 
-                                asp-action="Detail" asp-route-id="@item.Id">Detay</a>
+                            <a class="btn btn-primary"
+                               asp-action="Detail" asp-route-id="@item.Id">Detay</a>
 
                             <a class="btn btn-warning"
-                                asp-action="Update" asp-route-id="@item.Id">Düzenle</a>
+                               asp-action="Update" asp-route-id="@item.Id">Düzenle</a>
 
-                            <button class="btn btn-danger">Sil</button>
+                            <button onclick="Delete('@(item.Id)', this)" class="btn btn-danger">Sil</button>
                         </td>
                     </tr>
                 }
@@ -42,3 +42,23 @@
 
     </div>
 </div>
+
+
+@section Scripts {
+    <script>
+        function Delete(id, elem){
+            $.ajax({
+                url: "/Employee/Delete/" + id,
+                method: "POST",
+                success: function(response){
+                    if(response.success == true){
+                        $(elem).closest("tr").remove();
+                    }
+                },
+                error: function(){
+
+                }
+            });
+        }
+    </script>
+}
