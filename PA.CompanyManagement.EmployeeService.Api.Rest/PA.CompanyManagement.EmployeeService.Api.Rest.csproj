@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Grafana.OpenTelemetry" Version="1.5.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\PA.CompanyManagement.EmployeeService.Infrastructure\PA.CompanyManagement.EmployeeService.Infrastructure.csproj" />
   </ItemGroup>
 

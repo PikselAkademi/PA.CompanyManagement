@@ -1,3 +1,5 @@
+using Grafana.OpenTelemetry;
+
 namespace PA.CompanyManagement.Gateway
 {
     public class Program
@@ -8,6 +10,14 @@ namespace PA.CompanyManagement.Gateway
 
             builder.Services.AddReverseProxy()
                 .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
+
+            builder.Services.AddOpenTelemetry()
+                .UseGrafana();
+
+            builder.Logging.AddOpenTelemetry(conf =>
+            {
+                conf.UseGrafana();
+            });
 
             var app = builder.Build();
 
