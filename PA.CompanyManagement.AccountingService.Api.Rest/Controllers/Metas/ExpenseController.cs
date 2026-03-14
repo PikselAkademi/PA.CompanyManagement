@@ -11,15 +11,26 @@ namespace PA.CompanyManagement.AccountingService.Api.Rest.Controllers.Metas
     public class ExpenseController : ControllerBase
     {
         private readonly IExpenseRepository _repository;
+        private readonly ILogger<ExpenseController> _logger;
 
-        public ExpenseController(IExpenseRepository repository)
+        public ExpenseController(IExpenseRepository repository, 
+            ILogger<ExpenseController> logger)
         {
             _repository = repository;
+            _logger = logger;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
+            //_logger.LogTrace("");
+            //_logger.LogDebug("");
+            //_logger.LogInformation("");
+            //_logger.LogWarning("");
+            //_logger.LogError("");
+            //_logger.LogCritical("");
+
+            _logger.LogInformation("Accounting=>Expense=>GetAll çağırıldı.");
             try
             {
                 var response = await _repository.GetAllAsync();
@@ -31,6 +42,7 @@ namespace PA.CompanyManagement.AccountingService.Api.Rest.Controllers.Metas
             }
             catch (PAContextSaveException ex)
             {
+                _logger.LogError(ex, "DB Kayıt hatası");
                 return Problem(
                     statusCode: StatusCodes.Status500InternalServerError,
                     title: "Server Error!",
@@ -38,6 +50,7 @@ namespace PA.CompanyManagement.AccountingService.Api.Rest.Controllers.Metas
             }
             catch (PAContextUncatchedException ex)
             {
+                _logger.LogError(ex, $"Bilinmeyen Hata. Path:{Request.Path} Query:{Request.Query}");
                 return Problem(
                     statusCode: StatusCodes.Status500InternalServerError,
                     title: "Server Error!",
@@ -45,6 +58,7 @@ namespace PA.CompanyManagement.AccountingService.Api.Rest.Controllers.Metas
             }
             catch (Exception ex)
             {
+                _logger.LogCritical(ex, "Kategorize Edilmemiş Hata!");
                 return Problem(
                    statusCode: StatusCodes.Status500InternalServerError,
                    title: "Server Error!",

@@ -1,3 +1,4 @@
+using Grafana.OpenTelemetry;
 using PA.CompanyManagement.WebUI.Clients.Accounting;
 using PA.CompanyManagement.WebUI.Clients.Employee;
 using System.Net.Http.Headers;
@@ -9,6 +10,10 @@ namespace PA.CompanyManagement.WebUI
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddOpenTelemetry().UseGrafana();
+
+            builder.Logging.AddOpenTelemetry(conf => { conf.UseGrafana(); });
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();

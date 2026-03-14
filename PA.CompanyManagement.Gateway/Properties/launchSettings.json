@@ -17,8 +17,8 @@
       "applicationUrl": "https://localhost:7255;http://localhost:5246",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "OTEL_EXPORTER_OTLP_ENDPOINT": "https://otlp-gateway-prod-us-east-0.grafana.net/otlp",
-        "OTEL_EXPORTER_OTLP_HEADERS": "Authorization=Basic%20MTAxOTE4MjpnbGNfZXlKdklqb2lNVEl3TkRBek15SXNJbTRpT2lKNWIzVnlMV2R5WVdaaGJtRXRkRzlyWlc0aUxDSnJJam9pYWtrd2FqVTBVemt5ZDBVeU1FWjBaM1ZDUVRWalZESXhJaXdpYlNJNmV5SnlJam9pY0hKdlpDMTFjeTFsWVhOMExUQWlmWDA9",
+        "OTEL_EXPORTER_OTLP_ENDPOINT": "",
+        "OTEL_EXPORTER_OTLP_HEADERS": "",
         "OTEL_EXPORTER_OTLP_PROTOCOL": "http/protobuf",
         "OTEL_SERVICE_NAME": "aspnetcore-gateway-yarp",
         "OTEL_RESOURCE_ATTRIBUTES": "deployment.environment=dev,service.namespace=PA.CompanyManagement,service.version=0.1.0"

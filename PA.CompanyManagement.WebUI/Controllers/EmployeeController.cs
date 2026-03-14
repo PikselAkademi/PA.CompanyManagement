@@ -8,10 +8,12 @@ namespace PA.CompanyManagement.WebUI.Controllers
     public class EmployeeController : Controller
     {
         private readonly IEmployeeApiClient _client;
+        private readonly ILogger<EmployeeController> _logger;
 
-        public EmployeeController(IEmployeeApiClient client)
+        public EmployeeController(IEmployeeApiClient client, ILogger<EmployeeController> logger)
         {
             _client = client;
+            _logger = logger;
         }
 
         public async Task<IActionResult> Index()
@@ -71,12 +73,13 @@ namespace PA.CompanyManagement.WebUI.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(EmployeeUpdateRequest model)
         {
+            _logger.LogInformation("Güncelleme Başladı");
             if (ModelState.IsValid)
             {
                 await _client.UpdateAsync(model);
                 return RedirectToAction(nameof(Detail), new { id = model.Id });
             }
-
+            _logger.LogInformation("Güncelleme Bitti");
             return View(model);
         }
 

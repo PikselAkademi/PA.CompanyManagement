@@ -1,3 +1,4 @@
+using Grafana.OpenTelemetry;
 using PA.CompanyManagement.AccountingService.Application.Repositories.Metas;
 using PA.CompanyManagement.AccountingService.Application.Repositories.Types;
 using PA.CompanyManagement.AccountingService.Infrastructure.Contexts;
@@ -12,6 +13,14 @@ namespace PA.CompanyManagement.AccountingService.Api.Rest
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddOpenTelemetry()
+                .UseGrafana();
+
+            builder.Logging.AddOpenTelemetry(conf =>
+            {
+                conf.UseGrafana();
+            });
 
             // Add services to the container.
 

@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using PA.CompanyManagement.Core.Exceptions;
 using PA.CompanyManagement.EmployeeService.Application.DTOs.Requests;
 using PA.CompanyManagement.EmployeeService.Application.DTOs.Responses;
@@ -16,15 +19,20 @@ namespace PA.CompanyManagement.EmployeeService.Infrastructure.Repositories
     {
         private readonly EmployeeDbContext _context;
 
-        public EmployeeRepository(EmployeeDbContext context)
+        private readonly ILogger<EmployeeRepository> _logger;
+
+        public EmployeeRepository(EmployeeDbContext context, ILogger<EmployeeRepository> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public async Task<EmployeeResponse> CreateAsync(EmployeeCreateRequest request)
         {
+            _logger.LogTrace("EmployeeRepository/CreateAsync Çağırıldı.");
             try
             {
+                _logger.LogTrace("EmployeeRepository/CreateAsync AddAsync methodu çalıştırıldı.");
                 await _context.Employees.AddAsync(new Employee
                 {
                     FirstName = request.FirstName,
@@ -35,8 +43,10 @@ namespace PA.CompanyManagement.EmployeeService.Infrastructure.Repositories
                     Address = request.Address,
                     CreatedBy = request.CreatedBy,
                 });
+                _logger.LogTrace("EmployeeRepository/CreateAsync SaveChangesAsync methodu çalıştırıldı.");
                 await _context.SaveChangesAsync();
 
+                _logger.LogTrace("EmployeeRepository/CreateAsync İşlem sonucu döndürüldü.");
                 return await _context
                     .Employees
                     .Where(x => x.PhoneNumber == request.PhoneNumber)
@@ -54,6 +64,7 @@ namespace PA.CompanyManagement.EmployeeService.Infrastructure.Repositories
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, $"EmployeeRepository/CreateAsync - {ex.Message}");
                 throw new PAContextAddException(ex.Message, ex);
             }
         }
@@ -67,7 +78,10 @@ namespace PA.CompanyManagement.EmployeeService.Infrastructure.Repositories
                     .FindAsync(id);
 
                 if (data is null)
+                {
+                    _logger.LogWarning($"EmployeeRepository/DeleteAsync Çalışan Bulunamadı. | ID:{id}");
                     throw new PAContextQueryException("Çalışan bulunamadı!");
+                }
 
                 data.DeletedAt = DateTimeOffset.Now;
                 data.IsDeleted = true;
@@ -78,6 +92,7 @@ namespace PA.CompanyManagement.EmployeeService.Infrastructure.Repositories
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, $"EmployeeRepository/DeleteAsync - {ex.Message}");
                 throw new PAContextUpdateException(ex.Message, ex);
             }
         }
